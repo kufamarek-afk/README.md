@@ -114,7 +114,17 @@ if ( ! class_exists( 'Chata_Pri_Kastieli_Booking' ) ) {
          * Enqueue public assets.
          */
         public function enqueue_assets() {
-            if ( ! is_singular() && ! has_shortcode( get_post()->post_content ?? '', 'chata_booking_form' ) ) {
+            $post = get_post();
+
+            if ( ! is_singular() ) {
+                if ( ! $post instanceof \WP_Post ) {
+                    return;
+                }
+
+                if ( ! has_shortcode( $post->post_content, 'chata_booking_form' ) ) {
+                    return;
+                }
+            } elseif ( ! $post instanceof \WP_Post ) {
                 return;
             }
 
